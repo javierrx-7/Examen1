@@ -157,3 +157,24 @@ zone "tiendaelectronica.int" {
 
 # Realiza el apartado 9 en la máquina virtual con DNS
 
+Antes de nada debemos configurar los named.conf
+haciendo copia y pega de los hechos anteriormente con la tiendaelectronica para que se conecten y poner la maquina en adaptador puente.
+- Zona:
+    - zone "tiendaelectronica.int" {
+	type master;
+	file "/var/lib/bind/db.tiendadeelectronica.int";
+	allow-query {
+		any;
+		};
+	};
+
+- named.conf:
+    - include "/etc/bind/named.conf.options";
+    - include "/etc/bind/named.conf.local";
+
+sudo apt-get install bind9
+
+- - Leyendo lista de paquetes... Hecho
+- - Creando árbol de dependencias... Hecho
+- - Leyendo la información de estado... Hecho
+
