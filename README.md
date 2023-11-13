@@ -157,6 +157,15 @@ zone "tiendaelectronica.int" {
 
 # Realiza el apartado 9 en la máquina virtual con DNS
 
+- sudo apt-get install bind9
+ - Leyendo lista de paquetes... Hecho
+ - Creando árbol de dependencias... Hecho
+ - Leyendo la información de estado... Hecho
+
+- sudo apt-get install net-tools
+
+-sudo apt-get install dnsutils
+
 Antes de nada debemos configurar los named.conf
 haciendo copia y pega de los hechos anteriormente con la tiendaelectronica para que se conecten y poner la maquina en adaptador puente.
 - Zona:
@@ -172,9 +181,77 @@ haciendo copia y pega de los hechos anteriormente con la tiendaelectronica para 
     - include "/etc/bind/named.conf.options";
     - include "/etc/bind/named.conf.local";
 
-sudo apt-get install bind9
+- named.conf.options:
+    options {
+	directory "/var/cache/bind";
 
-- - Leyendo lista de paquetes... Hecho
-- - Creando árbol de dependencias... Hecho
-- - Leyendo la información de estado... Hecho
+	forwarders {
+	 	8.8.8.8;
+		1.1.1.1;
+	 };
+	 forward only;
+
+	listen-on { any; };
+	listen-on-v6 { any; };
+
+	allow-query {
+		any;
+	};
+};
+
+ - dig SOA:
+
+; <<>> DiG 9.18.18-0ubuntu0.22.04.1-Ubuntu <<>> SOA
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 15806
+;; flags: qr rd ra; QUERY: 1, ANSWER: 13, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 65494
+;; QUESTION SECTION:
+;.				IN	NS
+
+;; ANSWER SECTION:
+.			7781	IN	NS	c.root-servers.net.
+.			7781	IN	NS	i.root-servers.net.
+.			7781	IN	NS	j.root-servers.net.
+.			7781	IN	NS	f.root-servers.net.
+.			7781	IN	NS	l.root-servers.net.
+.			7781	IN	NS	b.root-servers.net.
+.			7781	IN	NS	g.root-servers.net.
+.			7781	IN	NS	m.root-servers.net.
+.			7781	IN	NS	d.root-servers.net.
+.			7781	IN	NS	k.root-servers.net.
+.			7781	IN	NS	h.root-servers.net.
+.			7781	IN	NS	a.root-servers.net.
+.			7781	IN	NS	e.root-servers.net.
+
+;; Query time: 8 msec
+;; SERVER: 127.0.0.53#53(127.0.0.53) (UDP)
+;; WHEN: Mon Nov 13 17:31:55 CET 2023
+;; MSG SIZE  rcvd: 239
+
+- dig @172.16.0.1 www.tiendaelectronica.int:
+
+; <<>> DiG 9.18.18-0ubuntu0.22.04.1-Ubuntu <<>> @172.16.0.1 www.tiendaelectronica.int
+; (1 server found)
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NXDOMAIN, id: 31475
+;; flags: qr rd ra; QUERY: 1, ANSWER: 0, AUTHORITY: 1, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1220
+; COOKIE: 06228e9fb49b2db856e9c2be65524fdeb239ca1cf2e0eb96 (good)
+;; QUESTION SECTION:
+;www.tiendaelectronica.int.	IN	A
+
+;; AUTHORITY SECTION:
+int.			5	IN	SOA	sns.dns.icann.org. noc.dns.icann.org. 2023110905 3600 1800 604800 3600
+
+;; Query time: 4 msec
+;; SERVER: 172.16.0.1#53(172.16.0.1) (UDP)
+;; WHEN: Mon Nov 13 17:33:34 CET 2023
+;; MSG SIZE  rcvd: 139
 
