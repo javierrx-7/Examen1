@@ -1,98 +1,43 @@
-# Añade al docker-compose del DNS otro servicio (contenedor) que haga la función de cliente.
-- cliente:
-    - container_name: cliente
-    - image: alpine
-    - platform: linux/amd64
-    - tty: true
-    - stdin_open: true
-- dns:
-    - 172.28.5.1
-- networks:
-    - alpine_subnet:
-        - ipv4_address: 172.28.5.2
+# Explica métodos para 'abrir' una consola/shell a un contenedor que se está ejecutando
 
-## Utiliza una imágen alpine
-### Ayuda: repositorio con el docker-compose.yml
-- docker compose up -d
-- docker network create \
-  --driver=bridge \
-  --subnet=172.28.0.0/16 \
-  --ip-range=172.28.5.0/24 \
-  --gateway=172.28.5.254 \
-  bind9_subnet
+    Para abrir la consola/shell a un contenedor que se está ejecutando lo que podemos hacer es usar el comando exec:
 
-- docker exec -it servidor_asir2 bash
+    docker exec -it contenedor bash
 
-- apt update
+    Aunque si estamos en el code y este está ejecutado, llendo a la zona de docker y haciendo clic derecho sobre el y seleccionando la opción de attach shell, ya estaria.
 
-- docker compose restart
+# En el contenedor anterior con que opciones tiene que haber sido arrancado para poder interactuar con las entradas y salidas del contenedor
 
-- docker exec cliente_asir2 bash
 
-- docker compose down
+# ¿Cómo sería un fichero docker-compose para que dos contenedores se comuniquen entre si en una red solo de ellos?
 
-- $TTL 38400	; 10 hours 40 minutes
-@		IN SOA	ns.asircastelao.int. some.email.address. (
-				10000002   ; serial
-				10800      ; refresh (3 hours)
-				3600       ; retry (1 hour)
-				604800     ; expire (1 week)
-				38400      ; minimum (10 hours 40 minutes)
-				)
-@		IN NS	ns.asircastelao.int.
-ns		IN A		172.22.5.1
-test	IN A		172.22.5.4
-www		IN A		172.22.5.7
-roberto   IN A          172.22.5.9
-alias	IN CNAME	test
-texto	IN TXT		mensaje
 
-# Instala, si es necesario, los paquetes necesarios para poder usar en el cliente los comandos de red del siguiente enlace.
-- dig @172.22.5.1 test.asircastelao.int
+# ¿Qué hay que añadir al fichero anterior para que un contenedor tenga la IP fija?
 
-- dig @172.22.5.1 roberto.asircastelao.int
-### Comprueba su uso.
-# Instala, si es necesario, para poder usar el comando 'dig'.
 
-- apt isntall dnsuntils
+# ¿Que comando de consola puedo usar para saber las ips de los contenedores anteriores? Filtra todo lo que puedas la salida.
 
-# Configura el cliente para que su DNS sea el otro contenedor, modificando el resolv.conf o utilizando el fichero docker-compose.yml
 
-- docker exec -it cliente_asir2 sh
+# ¿Cual es la funcionalidad del apartado "ports" en docker compose?
 
-- docker exec -it servidor_asir2 bash
 
-- ping 172.22.5.2
+# ¿Para que sirve el registro CNAME? Pon un ejemplo
 
-- apt update
 
-- apt install -y iputils-ping
+# ¿Como puedo hacer para que la configuración de un contenedor DNS no se borre si creo otro contenedor?
 
-- ping 172.22.5.2
 
-### Compruébalo con 'dig'.
+# Añade una zona tiendadeelectronica.int en tu docker DNS que tenga
 
-- apk add --no-cache bind-tools
+- www a la IP 172.16.0.1
 
-- dig @172.22.5.1 roberto.asircastelao.int
+- owncloud sea un CNAME de www
 
-- ; <<>> DiG 9.18.19 <<>> @172.22.5.1 xoelmarica.asircastelao.int
-; (1 server found)
-;; global options: +cmd
-;; Got answer:
-;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 56067
-;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+- un registro de texto con el contenido "1234ASDF"
 
-;; OPT PSEUDOSECTION:
-; EDNS: version: 0, flags:; udp: 1232
-; COOKIE: 9cfe1774e0f7db1101000000653682d036b20a0c8e349918 (good)
-;; QUESTION SECTION:
-;xoelmarica.asircastelao.int.   IN      A
+- Comprueba que todo funciona con el comando "dig"
 
-;; ANSWER SECTION:
-xoelmarica.asircastelao.int. 38400 IN   A       172.22.5.9
+- Muestra en los logs que el servicio arranca correctamente
 
-;; Query time: 0 msec
-;; SERVER: 172.22.5.1#53(172.22.5.1) (UDP)
-;; WHEN: Mon Oct 23 14:27:28 UTC 2023
-;; MSG SIZE  rcvd: 100
+
+# Realiza el apartado 9 en la máquina virtual con DNS
