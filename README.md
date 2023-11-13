@@ -155,6 +155,13 @@ zone "tiendaelectronica.int" {
 		};
 	};
 
+- docker compose up -d
+[+] Running 2/0
+ ✔ Container examen_asir2         Created                               0.0s 
+ ✔ Container clienteExamen_asir2  Cr...                                 0.0s 
+Error response from daemon: Invalid address 127.0.0.1: It does not belong to any of this network's subnets
+
+
 # Realiza el apartado 9 en la máquina virtual con DNS
 
 - sudo apt-get install bind9
@@ -255,3 +262,26 @@ int.			5	IN	SOA	sns.dns.icann.org. noc.dns.icann.org. 2023110905 3600 1800 60480
 ;; WHEN: Mon Nov 13 17:33:34 CET 2023
 ;; MSG SIZE  rcvd: 139
 
+- systemctl status bind9:
+● named.service - BIND Domain Name Server
+     Loaded: loaded (/lib/systemd/system/named.service; enabled; vendor preset: enabled)
+     Active: active (running) since Mon 2023-11-13 17:01:51 CET; 38min ago
+       Docs: man:named(8)
+    Process: 5362 ExecStart=/usr/sbin/named $OPTIONS (code=exited, status=0/SUCCESS)
+   Main PID: 5363 (named)
+      Tasks: 6 (limit: 9217)
+     Memory: 5.6M
+        CPU: 65ms
+     CGroup: /system.slice/named.service
+             └─5363 /usr/sbin/named -u bind
+
+nov 13 17:01:51 javier-VirtualBox named[5363]: network unreachable resolving './DNSKEY/IN': 2001>
+nov 13 17:01:51 javier-VirtualBox named[5363]: network unreachable resolving './NS/IN': 2001:500>
+nov 13 17:01:51 javier-VirtualBox named[5363]: network unreachable resolving './DNSKEY/IN': 2001>
+nov 13 17:01:51 javier-VirtualBox named[5363]: network unreachable resolving './NS/IN': 2001:500>
+nov 13 17:01:51 javier-VirtualBox named[5363]: network unreachable resolving './DNSKEY/IN': 2001>
+nov 13 17:01:51 javier-VirtualBox named[5363]: network unreachable resolving './NS/IN': 2001:500>
+nov 13 17:01:51 javier-VirtualBox named[5363]: network unreachable resolving './DNSKEY/IN': 2001>
+nov 13 17:01:51 javier-VirtualBox named[5363]: network unreachable resolving './NS/IN': 2001:503>
+nov 13 17:01:51 javier-VirtualBox named[5363]: managed-keys-zone: Key 20326 for zone . is now tr>
+nov 13 17:01:51 javier-VirtualBox named[5363]: resolver priming query complete: success
